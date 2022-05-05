@@ -75,4 +75,20 @@ public class ColorChannel {
             }
         }
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof ColorChannel) {
+            ColorChannel other = (ColorChannel) obj;
+            for (int i = 0; i < data.length; i++) {
+                for (int j = 0; j < data[0].length; j++) {
+                    if(data[i][j] != other.data[i][j]) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+        return false;
+    }
 }

@@ -22,6 +22,5 @@ public interface IPattern {
     public void storeAsInteger(File f);
     public void storeAsFloat(File f);
     public boolean equalsSize(IPattern other);
-    public boolean equalsChannel(IPattern other);
-
+    boolean equalsChannel(IPattern other, ColorChannel.Channel channel);
 }

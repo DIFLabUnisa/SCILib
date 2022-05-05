@@ -16,14 +16,17 @@ public class Constant {
     }
 
     public String getAppdir() {
+        // TODO To be implemented
         return null;
     }
 
     public boolean isWriteMessageLogOnConsole() {
+        // TODO To be implemented
         return false;
     }
 
     public String getStringLogName() {
+        // TODO To be implemented
         return null;
     }
 }

@@ -195,16 +195,53 @@ public class Pattern implements IPattern{
 
     @Override
     public void storeAsFloat(File f) {
+        if(f == null) {
+            logger.log.warn("File is null");
+            throw new IllegalArgumentException("File is null");
+        }
 
+        try (PrintStream ps = new PrintStream(f)) {
+
+            ps.print(getWidth() + " " + getHeight() + "\n\n");
+
+            printChannel(ColorChannel.RED, ps);
+            printChannel(ColorChannel.GREEN, ps);
+            printChannel(ColorChannel.BLUE, ps);
+        } catch (FileNotFoundException e) {
+            if (constant.isWriteMessageLogOnConsole()) {
+                e.printStackTrace();
+            }
+            logger.log.fatal("File not found: " + f.getAbsolutePath());
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public boolean equalsSize(IPattern other) {
-        return false;
+        if (other == null || this.getHeight() != other.getHeight() || this.getWidth() != other.getWidth()) {
+            return false;
+        }
+
+        return true;
     }
 
     @Override
-    public boolean equalsChannel(IPattern other) {
-        return false;
+    public boolean equalsChannel(IPattern other, ColorChannel.Channel channel) {
+        return this.getColorChannel(channel).equals(other.getColorChannel(channel));
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj) {
+            return true;
+        }
+
+        if(obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+
+        IPattern oth = (IPattern) obj;
+
+        return equalsSize(oth) && equalsChannel(oth, ColorChannel.Channel.RED) && equalsChannel(oth, ColorChannel.Channel.GREEN) && equalsChannel(oth, ColorChannel.Channel.BLUE);
     }
 }
