@@ -29,4 +29,9 @@ public class Constant {
         // TODO To be implemented
         return null;
     }
+
+    public boolean isWriteMessageOnStderr() {
+        // TODO To be implemented
+        return false;
+    }
 }
