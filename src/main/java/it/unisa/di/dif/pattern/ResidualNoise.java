@@ -1,11 +1,11 @@
 package it.unisa.di.dif.pattern;
 
 public class ResidualNoise extends NoisePattern{
-    public static ResidualNoise getInstanceBySubtraction(NoisePattern a, NoisePattern b){
+    public static ResidualNoise getInstanceBySubtraction(GenericPattern a, GenericPattern b){
         ResidualNoise r = null;
-        float red_data[][] = null;
-        float green_data[][] = null;
-        float blue_data[][] = null;
+        float[][] red_data = null;
+        float[][] green_data = null;
+        float[][] blue_data = null;
 
         if(a.equalsSize(b)){
             r = new ResidualNoise();
