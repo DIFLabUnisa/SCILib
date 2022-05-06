@@ -19,6 +19,7 @@ public interface Pattern {
     public void setRedChannel(ColorChannel value);
     public void setGreenChannel(ColorChannel value);
     public void setBlueChannel(ColorChannel value);
+    void storeNoise(File f, boolean asInt);
     public void storeAsInteger(File f);
     public void storeAsFloat(File f);
     public boolean equalsSize(Pattern other);

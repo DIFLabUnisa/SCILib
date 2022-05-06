@@ -1,28 +1,14 @@
 package it.unisa.di.dif.pattern;
 
+import it.unisa.di.dif.utils.Constant;
+
 import java.io.PrintStream;
+import java.util.Scanner;
 
 public class ColorChannel {
     public static final Channel RED = Channel.RED;
     public static final Channel GREEN = Channel.GREEN;
     public static final Channel BLUE = Channel.BLUE;
-
-    protected void print(PrintStream ps) {
-        for (float[] row : data) {
-            for (int j = 0; j < data[0].length; j++) {
-                ps.print(row[j] + " ");
-            }
-        }
-    }
-
-    protected void printAsInt(PrintStream ps) {
-        for (float[] row : data) {
-            for (int j = 0; j < data[0].length; j++) {
-                ps.print(((int)row[j]) + " ");
-            }
-            ps.println("\n");
-        }
-    }
 
     public enum Channel {
         RED, GREEN, BLUE
@@ -34,6 +20,35 @@ public class ColorChannel {
     public ColorChannel(float[][] data, Channel channel) {
         this.data = data;
         this.channel = channel;
+    }
+
+    public ColorChannel(String channelStored) {
+        Scanner sc = new Scanner(channelStored).useDelimiter("\n");
+        int i = 0;
+        while (sc.hasNextLine())
+        {
+            String line = sc.nextLine();
+            Scanner scLine = new Scanner(line).useDelimiter(Constant.VALUE_SEPARATOR_FOR_NOISE_FILE);
+            if (line.startsWith(String.valueOf(Constant.LINE_START_FOR_CHANNEL_IN_NOISE_FILE))) {
+                String name = scLine.next().substring(1);
+                setChannelFromName(name);
+                int width = scLine.nextInt();
+                int height = scLine.nextInt();
+                data = new float[height][width];
+            } else {
+                int j = 0;
+                while (scLine.hasNext()) {
+                    float value = scLine.nextFloat();
+                    if (data != null) {
+                        data[i][j] = value;
+                    } else {
+                        throw new IllegalArgumentException("Invalid pattern file");
+                    }
+                }
+                i+=1;
+            }
+
+        }
     }
 
     public float[][] getData() {
@@ -76,6 +91,55 @@ public class ColorChannel {
         }
     }
 
+    public String getChannelName() {
+        switch (channel) {
+        case RED:
+            return Constant.RED_CHANNEL_NAME;
+        case GREEN:
+            return Constant.GREEN_CHANNEL_NAME;
+        case BLUE:
+            return Constant.BLUE_CHANNEL_NAME;
+        default:
+            throw new IllegalArgumentException("Unknown channel");
+        }
+    }
+
+    public void setChannelFromName(String channelName) {
+        switch (channelName) {
+            case Constant.RED_CHANNEL_NAME:
+                channel = Channel.RED;
+                break;
+            case Constant.GREEN_CHANNEL_NAME:
+                channel = Channel.GREEN;
+                break;
+            case Constant.BLUE_CHANNEL_NAME:
+                channel = Channel.BLUE;
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown channel");
+        }
+    }
+
+    protected void print(PrintStream ps) {
+//        for (float[] row : data) {
+//            for (int j = 0; j < data[0].length; j++) {
+//                ps.print(row[j] + " ");
+//            }
+//            ps.println("\n");
+//        }
+        ps.println(this);
+    }
+
+    protected void printAsInt(PrintStream ps) {
+//        for (float[] row : data) {
+//            for (int j = 0; j < data[0].length; j++) {
+//                ps.print(((int)row[j]) + " ");
+//            }
+//            ps.println("\n");
+//        }
+        ps.println(this.toString(true));
+    }
+
     @Override
     public boolean equals(Object obj) {
         if(obj instanceof ColorChannel) {
@@ -90,5 +154,28 @@ public class ColorChannel {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return toString(false);
+    }
+
+    public String toString(boolean asInt) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(Constant.LINE_START_FOR_CHANNEL_IN_NOISE_FILE).append(this.getChannelName());
+        sb.append(Constant.VALUE_SEPARATOR_FOR_NOISE_FILE).append(this.getWidth()).append(Constant.VALUE_SEPARATOR_FOR_NOISE_FILE).append(this.getHeight());
+        for (float[] row : this.data) {
+            for (float v : row) {
+                if (asInt) {
+                    sb.append((int) v);
+                } else {
+                    sb.append(v);
+                }
+                sb.append(Constant.VALUE_SEPARATOR_FOR_NOISE_FILE);
+            }
+            sb.append("\n");
+        }
+        return sb.toString();
     }
 }

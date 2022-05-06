@@ -3,6 +3,12 @@ package it.unisa.di.dif.utils;
 import java.io.File;
 
 public class Constant {
+    public static final String VALUE_SEPARATOR_FOR_NOISE_FILE = "\t";
+    public static final Character LINE_START_FOR_INFO_IN_NOISE_FILE = '*';
+    public static final Character LINE_START_FOR_CHANNEL_IN_NOISE_FILE = '|';
+    public static final String RED_CHANNEL_NAME = "red";
+    public static final String GREEN_CHANNEL_NAME = "green";
+    public static final String BLUE_CHANNEL_NAME = "blue";
 
     private static Constant instance;
 

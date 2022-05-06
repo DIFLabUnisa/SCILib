@@ -139,7 +139,7 @@ public abstract class GenericPattern implements Pattern {
     }
 
     @Override
-    public void storeAsInteger(File f) {
+    public void storeNoise(File f, boolean asInt) {
         if(f == null) {
             logger.log.warn("File is null");
             throw new IllegalArgumentException("File is null");
@@ -147,11 +147,18 @@ public abstract class GenericPattern implements Pattern {
 
         try (PrintStream ps = new PrintStream(f)) {
 
-            ps.print(getWidth() + " " + getHeight() + "\n\n");
+            ps.print(Constant.LINE_START_FOR_INFO_IN_NOISE_FILE +
+                    getWidth() + Constant.VALUE_SEPARATOR_FOR_NOISE_FILE + getHeight() + "\n");
 
-            printChannelAsInt(ColorChannel.RED, ps);
-            printChannelAsInt(ColorChannel.GREEN, ps);
-            printChannelAsInt(ColorChannel.BLUE, ps);
+            if(asInt) {
+                printChannelAsInt(ColorChannel.RED, ps);
+                printChannelAsInt(ColorChannel.GREEN, ps);
+                printChannelAsInt(ColorChannel.BLUE, ps);
+            } else {
+                printChannel(ColorChannel.RED, ps);
+                printChannel(ColorChannel.GREEN, ps);
+                printChannel(ColorChannel.BLUE, ps);
+            }
         } catch (FileNotFoundException e) {
             if (constant.isWriteMessageLogOnConsole()) {
                 e.printStackTrace();
@@ -159,6 +166,11 @@ public abstract class GenericPattern implements Pattern {
             logger.log.fatal("File not found: " + f.getAbsolutePath());
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void storeAsInteger(File f) {
+        storeNoise(f, true);
     }
 
     private void printChannel(ColorChannel.Channel channel, PrintStream ps) {
@@ -195,25 +207,7 @@ public abstract class GenericPattern implements Pattern {
 
     @Override
     public void storeAsFloat(File f) {
-        if(f == null) {
-            logger.log.warn("File is null");
-            throw new IllegalArgumentException("File is null");
-        }
-
-        try (PrintStream ps = new PrintStream(f)) {
-
-            ps.print(getWidth() + " " + getHeight() + "\n\n");
-
-            printChannel(ColorChannel.RED, ps);
-            printChannel(ColorChannel.GREEN, ps);
-            printChannel(ColorChannel.BLUE, ps);
-        } catch (FileNotFoundException e) {
-            if (constant.isWriteMessageLogOnConsole()) {
-                e.printStackTrace();
-            }
-            logger.log.fatal("File not found: " + f.getAbsolutePath());
-            throw new RuntimeException(e);
-        }
+        storeNoise(f, false);
     }
 
     @Override
