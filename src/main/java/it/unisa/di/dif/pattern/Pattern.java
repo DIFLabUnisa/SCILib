@@ -24,4 +24,6 @@ public interface Pattern {
     public void storeAsFloat(File f);
     public boolean equalsSize(Pattern other);
     boolean equalsChannel(Pattern other, ColorChannel.Channel channel);
+    public void crop(int width, int height);
+    public Pattern getCroppedPattern(int width, int height);
 }

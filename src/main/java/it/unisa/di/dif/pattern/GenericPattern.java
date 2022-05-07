@@ -221,6 +221,16 @@ public abstract class GenericPattern implements Pattern {
     }
 
     @Override
+    public void crop(int width, int height) {
+        if(width < 0 || height < 0) {
+            throw new IllegalArgumentException("Width and height must be greater than 0");
+        }
+        red = new ColorChannel(red.getCentralCropping(width, height), ColorChannel.RED);
+        green = new ColorChannel(green.getCentralCropping(width, height), ColorChannel.GREEN);
+        blue = new ColorChannel(blue.getCentralCropping(width, height), ColorChannel.BLUE);
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if(this == obj) {
             return true;

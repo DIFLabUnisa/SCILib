@@ -161,6 +161,21 @@ public class ColorChannel {
         return toString(false);
     }
 
+    public float[][] getCentralCropping(int width, int height) {
+        if(width > data.length || height > data[0].length) {
+            throw new IllegalArgumentException("Cropping size is larger than channel size");
+        }
+        int x = (data.length - height) / 2;
+        int y = (data[0].length - width) / 2;
+        int x_end = x + height;
+        int y_end = y + width;
+        float[][] cropped = new float[height][width];
+        for(int i = x; i < x_end; i++) {
+            if (y_end - y >= 0) System.arraycopy(data[i], y, cropped[i - x], y - y, y_end - y);
+        }
+        return cropped;
+    }
+
     public String toString(boolean asInt) {
         StringBuilder sb = new StringBuilder();
         sb.append(Constant.LINE_START_FOR_CHANNEL_IN_NOISE_FILE).append(this.getChannelName());

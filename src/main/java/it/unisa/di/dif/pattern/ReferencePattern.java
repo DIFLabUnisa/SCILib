@@ -41,4 +41,13 @@ public class ReferencePattern extends NoisePattern{
     public String toString() {
         return "ReferencePattern [width=" + this.getWidth() + ", height=" + this.getHeight() + "]";
     }
+
+    @Override
+    public ReferencePattern getCroppedPattern(int width, int height) {
+        ReferencePattern copy = new ReferencePattern();
+        copy.setRedChannel(new ColorChannel(this.getRedChannel().getCentralCropping(width, height), ColorChannel.RED));
+        copy.setGreenChannel(new ColorChannel(this.getGreenChannel().getCentralCropping(width, height), ColorChannel.GREEN));
+        copy.setBlueChannel(new ColorChannel(this.getBlueChannel().getCentralCropping(width, height), ColorChannel.BLUE));
+        return copy;
+    }
 }

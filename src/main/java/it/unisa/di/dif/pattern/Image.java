@@ -11,6 +11,10 @@ import java.io.IOException;
 public class Image extends GenericPattern{
     private boolean isFiltered;
 
+    public Image() {
+        super();
+    }
+
     public Image(File f) throws IOException {
         super();
 
@@ -114,5 +118,15 @@ public class Image extends GenericPattern{
             msg="immagine originaria (non filtrata)";
 
         return "ImmagineFile [Base="+ this.getWidth()+", Altezza=" + this.getHeight() + ", "+msg + "]";
+    }
+
+    @Override
+    public Image getCroppedPattern(int width, int height) {
+        Image copy = new Image();
+        copy.setRedChannel(new ColorChannel(this.getRedChannel().getCentralCropping(width, height), ColorChannel.RED));
+        copy.setGreenChannel(new ColorChannel(this.getGreenChannel().getCentralCropping(width, height), ColorChannel.GREEN));
+        copy.setBlueChannel(new ColorChannel(this.getBlueChannel().getCentralCropping(width, height), ColorChannel.BLUE));
+        copy.setFiltered(this.isFiltered());
+        return copy;
     }
 }

@@ -33,4 +33,13 @@ public class ResidualNoise extends NoisePattern{
     public String toString() {
         return "ResidualNoise [width=" + this.getWidth() + ", height=" + this.getHeight() + "]";
     }
+
+    @Override
+    public ResidualNoise getCroppedPattern(int width, int height) {
+        ResidualNoise copy = new ResidualNoise();
+        copy.setRedChannel(new ColorChannel(this.getRedChannel().getCentralCropping(width, height), ColorChannel.RED));
+        copy.setGreenChannel(new ColorChannel(this.getGreenChannel().getCentralCropping(width, height), ColorChannel.GREEN));
+        copy.setBlueChannel(new ColorChannel(this.getBlueChannel().getCentralCropping(width, height), ColorChannel.BLUE));
+        return copy;
+    }
 }
