@@ -6,7 +6,7 @@
 
     <groupId>it.unisa.di.dif</groupId>
     <artifactId>SCILib</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0-alpha</version>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
