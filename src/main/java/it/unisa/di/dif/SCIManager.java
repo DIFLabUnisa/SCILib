@@ -1,5 +1,6 @@
 package it.unisa.di.dif;
 
+import it.unisa.di.dif.correlation.Pearson;
 import it.unisa.di.dif.filter.Filter;
 import it.unisa.di.dif.filter.FilterFactory;
 import it.unisa.di.dif.pattern.*;
@@ -45,8 +46,19 @@ public abstract class SCIManager {
                     .map(image -> image.getCroppedPattern(finalWidth, finalHeight))
                     .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
         }
-        //TODO: Complete the implementation using calcolaReferencePattern_2
-        return null;
+
+        int height = images.get(0).getHeight();
+        int width = images.get(0).getWidth();
+        ReferencePattern rp = new ReferencePattern(height, width);
+        int numImagesInRP = 0;
+        for (Image image : images) {
+            ResidualNoise rn = extractResidualNoise(image, filter);
+            rp.add(rn);
+            numImagesInRP++;
+        }
+        rp.divideByValue(numImagesInRP);
+
+        return rp;
     }
 
     public static ReferencePattern extractReferencePattern(ArrayList<Image> images, Filter filter) {
@@ -88,12 +100,25 @@ public abstract class SCIManager {
         return extractResidualNoise(new Image(path));
     }
 
-    public static float compare(ReferencePattern referencePattern, NoisePattern residualNoise, AdaptationMethod method) {
-        // TODO: To be implemented
-        return 0;
+    public static double compare(ReferencePattern referencePattern, NoisePattern residualNoise, AdaptationMethod method) {
+        if(!referencePattern.equalsSize(residualNoise)) {
+            if(method == AdaptationMethod.NOT_ADAPT) {
+                throw new IllegalArgumentException("Error: reference pattern and residual noise have different sizes and adaptation method is set to NOT_ADAPT");
+            } else if(method == AdaptationMethod.RESIZE) {
+                throw new UnsupportedOperationException("Resize method is not supported yet");
+            } else if(method == AdaptationMethod.CROP) {
+                int height = Math.min(referencePattern.getHeight(), residualNoise.getHeight());
+                int width = Math.min(referencePattern.getWidth(), residualNoise.getWidth());
+                referencePattern = referencePattern.getCroppedPattern(width, height);
+                residualNoise = residualNoise.getCroppedPattern(width, height);
+            }
+        }
+        Pearson p = new Pearson(referencePattern, residualNoise);
+
+        return p.getCorrelationCoefficient();
     }
 
-    public static float compare(ReferencePattern referencePattern, NoisePattern residualNoise) {
+    public static double compare(ReferencePattern referencePattern, NoisePattern residualNoise) {
         return compare(referencePattern, residualNoise, AdaptationMethod.NOT_ADAPT);
     }
 }

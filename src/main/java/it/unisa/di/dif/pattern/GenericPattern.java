@@ -15,6 +15,18 @@ public abstract class GenericPattern implements Pattern {
     private final CHILogger logger = CHILogger.getInstance();
     private final Constant constant = Constant.getInstance();
 
+    public GenericPattern(int height, int width) {
+        float[][] red_data = new float[height][width];
+        float[][] green_data = new float[height][width];
+        float[][] blue_data = new float[height][width];
+        this.red = new ColorChannel(red_data, ColorChannel.Channel.RED);
+        this.green = new ColorChannel(green_data, ColorChannel.Channel.GREEN);
+        this.blue = new ColorChannel(blue_data, ColorChannel.Channel.BLUE);
+        this.clear();
+    }
+
+    public GenericPattern() {}
+
     @Override
     public ColorChannel getColorChannel(ColorChannel.Channel channel) {
         switch (channel) {
@@ -124,17 +136,27 @@ public abstract class GenericPattern implements Pattern {
     }
 
     @Override
-    public void setRedChannel(ColorChannel value) {
+    public void setRedChannel(ColorChannel value)
+    {
+        if (value.getChannel() != ColorChannel.Channel.RED ){
+            throw new IllegalArgumentException("Invalid channel");
+        }
         setChannel(value);
     }
 
     @Override
     public void setGreenChannel(ColorChannel value) {
+        if (value.getChannel() != ColorChannel.Channel.GREEN ){
+            throw new IllegalArgumentException("Invalid channel");
+        }
         setChannel(value);
     }
 
     @Override
     public void setBlueChannel(ColorChannel value) {
+        if(value.getChannel() != ColorChannel.Channel.BLUE ){
+            throw new IllegalArgumentException("Invalid channel");
+        }
         setChannel(value);
     }
 
@@ -249,4 +271,83 @@ public abstract class GenericPattern implements Pattern {
     public String toString() {
         return "GenericPattern [width=" + this.getWidth() + ", height=" + this.getHeight() + "]";
     }
+
+    public void add(GenericPattern pattern) {
+        if(!equalsSize(pattern)) {
+            throw new IllegalArgumentException("Patterns must be of the same size");
+        }
+
+        for(ColorChannel.Channel channel : ColorChannel.Channel.values()) {
+            for(int i = 0; i < this.getHeight(); i++) {
+                for(int j = 0; j < this.getWidth(); j++) {
+                    this.getColorChannel(channel).setValue(i, j,
+                            this.getColorChannel(channel).getValue(i, j) + pattern.getColorChannel(channel).getValue(i, j));
+                }
+            }
+        }
+    }
+
+    public void subtract(GenericPattern pattern) {
+        if(!equalsSize(pattern)) {
+            throw new IllegalArgumentException("Patterns must be of the same size");
+        }
+
+        for(ColorChannel.Channel channel : ColorChannel.Channel.values()) {
+            for(int i = 0; i < this.getHeight(); i++) {
+                for(int j = 0; j < this.getWidth(); j++) {
+                    this.getColorChannel(channel).setValue(i, j,
+                            this.getColorChannel(channel).getValue(i, j) - pattern.getColorChannel(channel).getValue(i, j));
+                }
+            }
+        }
+    }
+
+    public void multiply(GenericPattern pattern) {
+        if(!equalsSize(pattern)) {
+            throw new IllegalArgumentException("Patterns must be of the same size");
+        }
+
+        for(ColorChannel.Channel channel : ColorChannel.Channel.values()) {
+            for(int i = 0; i < this.getHeight(); i++) {
+                for(int j = 0; j < this.getWidth(); j++) {
+                    this.getColorChannel(channel).setValue(i, j,
+                            this.getColorChannel(channel).getValue(i, j) * pattern.getColorChannel(channel).getValue(i, j));
+                }
+            }
+        }
+    }
+
+    public void divide(GenericPattern pattern) {
+        if(!equalsSize(pattern)) {
+            throw new IllegalArgumentException("Patterns must be of the same size");
+        }
+
+        for(ColorChannel.Channel channel : ColorChannel.Channel.values()) {
+            for(int i = 0; i < this.getHeight(); i++) {
+                for(int j = 0; j < this.getWidth(); j++) {
+                    float value = pattern.getColorChannel(channel).getValue(i, j) == 0 ? 0 :
+                            this.getColorChannel(channel).getValue(i, j) / pattern.getColorChannel(channel).getValue(i, j);
+                    this.getColorChannel(channel).setValue(i, j, value);
+                }
+            }
+        }
+    }
+
+    public void divideByValue(float value) {
+        if(value == 0) {
+            throw new IllegalArgumentException("Value must be non-zero");
+        }
+
+        for(ColorChannel.Channel channel : ColorChannel.Channel.values()) {
+            for(int i = 0; i < this.getHeight(); i++) {
+                for(int j = 0; j < this.getWidth(); j++) {
+                    float r = this.getColorChannel(channel).getValue(i, j) / value;
+                    this.getColorChannel(channel).setValue(i, j, r);
+                }
+            }
+        }
+    }
+
+    @Override
+    public abstract GenericPattern getCroppedPattern(int width, int height);
 }

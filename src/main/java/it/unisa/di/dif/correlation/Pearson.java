@@ -114,4 +114,8 @@ public class Pearson {
                 ", blue_correlation=" + blue_correlation +
                 '}';
     }
+
+    public double getCorrelationCoefficient() {
+        return (getRed_correlation() + getGreen_correlation() + getBlue_correlation()) / 3;
+    }
 }

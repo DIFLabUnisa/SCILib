@@ -14,6 +14,10 @@ public class ReferencePattern extends NoisePattern{
         this.setBlueChannel(rn.getBlueChannel());
     }
 
+    public ReferencePattern(int height, int width) {
+        super(height, width);
+    }
+
     public static ReferencePattern random(int height, int width) {
         SecureRandom random = new SecureRandom();
 
