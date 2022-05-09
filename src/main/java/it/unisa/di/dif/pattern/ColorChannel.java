@@ -162,7 +162,7 @@ public class ColorChannel {
     }
 
     public float[][] getCentralCropping(int width, int height) {
-        if(width > data.length || height > data[0].length) {
+        if(height > data.length || width > data[0].length) {
             throw new IllegalArgumentException("Cropping size is larger than channel size");
         }
         int x = (data.length - height) / 2;

@@ -6,7 +6,7 @@
 
     <groupId>it.unisa.di.dif</groupId>
     <artifactId>scilib</artifactId>
-    <version>1.0.0-alpha2</version>
+    <version>1.0.0-alpha3</version>
     <build>
         <plugins>
             <plugin>
