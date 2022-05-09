@@ -22,22 +22,18 @@ public class Constant {
     }
 
     public String getAppdir() {
-        // TODO To be implemented
-        return null;
+        return ".";
     }
 
     public boolean isWriteMessageLogOnConsole() {
-        // TODO To be implemented
-        return false;
+        return true;
     }
 
     public String getStringLogName() {
-        // TODO To be implemented
-        return null;
+        return "SCILib";
     }
 
     public boolean isWriteMessageOnStderr() {
-        // TODO To be implemented
-        return false;
+        return true;
     }
 }

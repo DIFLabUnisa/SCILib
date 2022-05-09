@@ -98,6 +98,7 @@ public class Test {
     }
 
     public static void main(String[] args) throws IOException {
+        System.setProperty("loglevel", "DEBUG");
         String basePath = "data";
         String baseOutputPath = "output";
         String[] devicesPath = {"D90_1", "D90_2", "D850", "Z50"};
@@ -135,7 +136,8 @@ public class Test {
 
         for (RNTuple rn : rns) {
             // Store Residual Noise as text file with float values
-            Path p = Paths.get(baseOutputPath, rn.device, rn.imgName+"_rn.txt");
+            String imgname = new File(rn.imgName).getName();
+            Path p = Paths.get(baseOutputPath, rn.device, imgname+"_rn.txt");
             File f = new File(p.toAbsolutePath().toString());
             f.getParentFile().mkdirs();
             rn.noise.storeAsFloat(f);

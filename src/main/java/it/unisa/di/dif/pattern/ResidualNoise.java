@@ -97,7 +97,7 @@ public class ResidualNoise extends NoisePattern{
     public ResidualNoise getCroppedPattern(int width, int height) {
         ResidualNoise copy = new ResidualNoise();
         for (ColorChannel.Channel channel : ColorChannel.Channel.values()) {
-            copy.setChannel(new ColorChannel(this.getRedChannel().getCentralCropping(width, height), ColorChannel.RED));
+            copy.setChannel(new ColorChannel(this.getRedChannel().getCentralCropping(width, height), channel));
         }
         return copy;
     }

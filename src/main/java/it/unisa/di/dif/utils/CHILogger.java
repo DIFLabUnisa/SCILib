@@ -30,11 +30,41 @@ public class CHILogger {
             logFolder.mkdirs();
         }
 
+        String level = System.getProperty("logLevel", "WARN");
+
+        Level l = Level.WARN;
+
+        switch(level.toUpperCase()){
+            case "DEBUG":
+                l = Level.DEBUG;
+                break;
+            case "INFO":
+                l = Level.INFO;
+                break;
+            case "ERROR":
+                l = Level.ERROR;
+                break;
+            case "FATAL":
+                l = Level.FATAL;
+                break;
+            case "TRACE":
+                l = Level.TRACE;
+                break;
+            case "ALL":
+                l = Level.ALL;
+                break;
+            case "OFF":
+                l = Level.OFF;
+                break;
+            default:
+                l = Level.WARN;
+        }
+
         String logFilePath=logFolder.getAbsolutePath()+File.separator+"dif.log";
         String logFilePatternPath=logFolder.getAbsolutePath()+File.pathSeparator+"dif-%d{MM-dd-yy}.log.gz";
 
         ConfigurationBuilder<BuiltConfiguration> builder = ConfigurationBuilderFactory.newConfigurationBuilder();
-        builder.setStatusLevel(Level.ALL)
+        builder.setStatusLevel(l)
                 .setConfigurationName("SCIConfiguration");
 
         LayoutComponentBuilder layoutBuilder = builder.newLayout("PatternLayout")
