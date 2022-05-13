@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="SCILib" />
+        <module name="scilib" />
       </profile>
     </annotationProcessing>
   </component>
