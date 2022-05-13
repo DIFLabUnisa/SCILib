@@ -6,9 +6,14 @@
 
     <groupId>it.unisa.di.dif</groupId>
     <artifactId>scilib</artifactId>
-    <version>1.0.0-beta1</version>
+    <version>1.0.0</version>
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.4.0</version>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
@@ -19,6 +24,16 @@
                         <goals>
                             <goal>jar</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <phase>deploy</phase>
+                        <goals><goal>jar</goal></goals>
                     </execution>
                 </executions>
             </plugin>
