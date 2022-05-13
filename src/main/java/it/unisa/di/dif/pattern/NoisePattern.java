@@ -1,17 +1,28 @@
 package it.unisa.di.dif.pattern;
 
-import it.unisa.di.dif.utils.CHILogger;
-import it.unisa.di.dif.utils.Constant;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
-
+/**
+ * Marker abstract class used to identify all the noise types (i.e. Reference Pattern and Residual Noise)
+ *
+ * @see ReferencePattern
+ * @see ResidualNoise
+ * @author Andrea Bruno
+* @author Paola Capasso
+ */
 public abstract class NoisePattern extends GenericPattern {
+    /**
+     * Default constructor
+     */
     public NoisePattern() {
         super();
     }
 
+
+    /**
+     * Generate a new Noise pattern with the specified height and width
+     *
+     * @param height the height of the new noise pattern
+     * @param width  the width of the new noise pattern
+     */
     public NoisePattern(int height, int width) {
         super(height, width);
     }

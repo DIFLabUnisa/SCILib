@@ -1,38 +1,90 @@
 package it.unisa.di.dif.pattern;
 
+/**
+ * This class represent a Residual Noise of an image
+ *
+ * @author Andrea Bruno
+* @author Paola Capasso
+ */
 public class ResidualNoise extends NoisePattern{
+    /**
+     * Default constructor
+     */
     public ResidualNoise() {
         super();
     }
 
+    /**
+     * Generate a new Reference pattern with the specified height and width
+     *
+     * @param height the height of the new noise pattern
+     * @param width  the width of the new noise pattern
+     */
     public ResidualNoise(int height, int width) {
         super(height, width);
     }
 
+    /**
+     * Generate a new Reference pattern with the specified height and width and set all the channels to 0
+     *
+     * @param height the height of the image
+     * @param width the width of the image
+     * @return A new instance of ResidualNoise with the height and width of the image.
+     */
     public static ResidualNoise getInstanceBySize(int height, int width) {
         ResidualNoise r = new ResidualNoise();
         float[][] red_data = new float[height][width];
         float[][] green_data = new float[height][width];
         float[][] blue_data = new float[height][width];
-        r.setChannel(new ColorChannel(red_data, ColorChannel.Channel.RED));
-        r.setChannel(new ColorChannel(green_data, ColorChannel.Channel.GREEN));
-        r.setChannel(new ColorChannel(blue_data, ColorChannel.Channel.BLUE));
+        r.setChannel(new ColorChannel(red_data, ColorChannel.Color.RED));
+        r.setChannel(new ColorChannel(green_data, ColorChannel.Color.GREEN));
+        r.setChannel(new ColorChannel(blue_data, ColorChannel.Color.BLUE));
         r.clear();
         return r;
     }
 
+    /**
+     * This function returns a new instance of the ResidualNoise class, which is the result of subtracting the two
+     * GenericPattern objects passed as arguments
+     *
+     * @param a The first pattern
+     * @param b the pattern to be subtracted from a
+     * @return A new instance of ResidualNoise.
+     */
     public static ResidualNoise getInstanceBySubtraction(GenericPattern a, GenericPattern b){
         return ResidualNoise.getInstantByOperation(a, b, "-");
     }
 
+    /**
+     * Get the instance of the ResidualNoise class by adding two GenericPatterns together.
+     *
+     * @param a The first pattern
+     * @param b the pattern to be added to a
+     * @return A new instance of ResidualNoise.
+     */
     public static ResidualNoise getInstanceByAddition(GenericPattern a, GenericPattern b) {
         return ResidualNoise.getInstantByOperation(a, b, "+");
     }
 
+    /**
+     * This function returns a new ResidualNoise object that is the product of two GenericPattern objects.
+     *
+     * @param a The first pattern
+     * @param b the pattern to be used as the base
+     * @return A new instance of ResidualNoise.
+     */
     public static ResidualNoise getInstanceByMultiplication(GenericPattern a, GenericPattern b) {
         return ResidualNoise.getInstantByOperation(a, b, "*");
     }
 
+    /**
+     * This function returns a new instance of the ResidualNoise class, which is the result of dividing the two
+     * GenericPatterns passed as arguments
+     *
+     * @param a The first pattern
+     * @param b the pattern to be divided by
+     * @return A new instance of ResidualNoise.
+     */
     public static ResidualNoise getInstanceByDivision(GenericPattern a, GenericPattern b) {
         return ResidualNoise.getInstantByOperation(a, b, "/");
     }
@@ -40,8 +92,8 @@ public class ResidualNoise extends NoisePattern{
     private static ResidualNoise getInstantByOperation(GenericPattern a, GenericPattern b, String op){
         if(a.equalsSize(b)){
             ResidualNoise r = new ResidualNoise();
-            for(ColorChannel.Channel channel : ColorChannel.Channel.values()){
-                r.setChannel(a.getColorChannel(channel));
+            for(ColorChannel.Color color : ColorChannel.Color.values()){
+                r.setChannel(a.getColorChannel(color));
             }
             switch (op) {
                 case "+":
@@ -65,6 +117,13 @@ public class ResidualNoise extends NoisePattern{
         }
     }
 
+    /**
+     * It takes a pattern and an integer, and returns a residual noise object with the pattern divided by the integer
+     *
+     * @param a The pattern to be divided
+     * @param b The integer to divide by
+     * @return A ResidualNoise object
+     */
     public static ResidualNoise divideByInteger(GenericPattern a, int b) {
         if(b == 0){
             throw new IllegalArgumentException("Divisor cannot be zero");
@@ -76,15 +135,15 @@ public class ResidualNoise extends NoisePattern{
 
         for(int i = 0; i < a.getHeight(); i++){
             for(int j = 0; j < a.getWidth(); j++){
-                red_data[i][j] = a.getValue(i, j, ColorChannel.Channel.RED) * b;
-                green_data[i][j] = a.getValue(i, j, ColorChannel.Channel.GREEN) * b;
-                blue_data[i][j] = a.getValue(i, j, ColorChannel.Channel.BLUE) * b;
+                red_data[i][j] = a.getValue(i, j, ColorChannel.Color.RED) * b;
+                green_data[i][j] = a.getValue(i, j, ColorChannel.Color.GREEN) * b;
+                blue_data[i][j] = a.getValue(i, j, ColorChannel.Color.BLUE) * b;
             }
         }
 
-        r.setChannel(new ColorChannel(red_data, ColorChannel.Channel.RED));
-        r.setChannel(new ColorChannel(green_data, ColorChannel.Channel.GREEN));
-        r.setChannel(new ColorChannel(blue_data, ColorChannel.Channel.BLUE));
+        r.setChannel(new ColorChannel(red_data, ColorChannel.Color.RED));
+        r.setChannel(new ColorChannel(green_data, ColorChannel.Color.GREEN));
+        r.setChannel(new ColorChannel(blue_data, ColorChannel.Color.BLUE));
         return r;
     }
 
@@ -96,8 +155,8 @@ public class ResidualNoise extends NoisePattern{
     @Override
     public ResidualNoise getCroppedPattern(int width, int height) {
         ResidualNoise copy = new ResidualNoise();
-        for (ColorChannel.Channel channel : ColorChannel.Channel.values()) {
-            copy.setChannel(new ColorChannel(this.getRedChannel().getCentralCropping(width, height), channel));
+        for (ColorChannel.Color color : ColorChannel.Color.values()) {
+            copy.setChannel(new ColorChannel(this.getRedChannel().getCentralCropping(width, height), color));
         }
         return copy;
     }

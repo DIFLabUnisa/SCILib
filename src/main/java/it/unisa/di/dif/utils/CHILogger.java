@@ -11,12 +11,20 @@ import org.apache.logging.log4j.core.config.builder.impl.BuiltConfiguration;
 
 import java.io.File;
 
+/**
+ * The CHILogger class is a singleton class that creates a logger object that writes to a log file
+ */
 public class CHILogger {
     public Logger log;
     public final String TIME_STAT= "<<RT>>";
     public Constant constant = Constant.getInstance();
     public static CHILogger instance = null;
 
+    /**
+     * If the instance is null, create a new instance of CHILogger and return it
+     *
+     * @return The instance of the CHILogger class.
+     */
     public static CHILogger getInstance() {
         if(instance == null) {
             instance = new CHILogger();

@@ -6,11 +6,23 @@ import it.unisa.di.dif.pattern.Pattern;
 import java.util.ArrayList;
 import java.util.OptionalDouble;
 
+/**
+ * Class implementing the Newman-Pearson correlation for Noise Patterns
+ *
+ * @author Andrea Bruno
+* @author Paola Capasso
+ */
 public class Pearson {
     private double red_correlation = Double.NaN;
     private double green_correlation = Double.NaN;
     private double blue_correlation = Double.NaN;
 
+    /**
+     * Contructor that generates a Newman-Person correlation for Noise Pattern given its values.
+     * @param red_correlation correlation value for red channel
+     * @param green_correlation correlation value for green channel
+     * @param blue_correlation correlation value for blue channel
+     */
     public Pearson(double red_correlation, double green_correlation, double blue_correlation) {
         this.red_correlation = red_correlation;
         this.green_correlation = green_correlation;
@@ -18,6 +30,12 @@ public class Pearson {
     }
 
 
+    /**
+     * A constructor that takes two patterns as input and computes the Pearson correlation for each color channel.
+     *
+     * @param p1 First Noise Pattern.
+     * @param p2 Second Noise Pattern.
+     */
     public Pearson(Pattern p1, Pattern p2) {
         if(p1 == null || p2 == null) {
             throw new IllegalArgumentException("Patterns are null");
@@ -27,11 +45,17 @@ public class Pearson {
             throw new IllegalArgumentException("Patterns are not of the same size");
         }
 
-        red_correlation = computeCorrelation(p1.getColorChannel(ColorChannel.Channel.RED), p2.getColorChannel(ColorChannel.Channel.RED));
-        green_correlation = computeCorrelation(p1.getColorChannel(ColorChannel.Channel.GREEN), p2.getColorChannel(ColorChannel.Channel.GREEN));
-        blue_correlation = computeCorrelation(p1.getColorChannel(ColorChannel.Channel.BLUE), p2.getColorChannel(ColorChannel.Channel.BLUE));
+        red_correlation = computeCorrelation(p1.getColorChannel(ColorChannel.Color.RED), p2.getColorChannel(ColorChannel.Color.RED));
+        green_correlation = computeCorrelation(p1.getColorChannel(ColorChannel.Color.GREEN), p2.getColorChannel(ColorChannel.Color.GREEN));
+        blue_correlation = computeCorrelation(p1.getColorChannel(ColorChannel.Color.BLUE), p2.getColorChannel(ColorChannel.Color.BLUE));
     }
 
+    /**
+     * Returns the value of the Newman-Pearson correlation for red channel, if calculated.
+     *
+     * @return The Newman-Pearson correlation for red channel.
+     * @throws IllegalStateException If the value of Newman-Pearson correlation for red channel is NaN (is not calculated), throw an exception.
+     */
     public double getRed_correlation() {
         if (Double.isNaN(red_correlation)) {
             throw new IllegalStateException("red_correlation is not set");
@@ -39,10 +63,21 @@ public class Pearson {
         return red_correlation;
     }
 
+    /**
+     * This function sets the value of the correlation for the red channel
+     *
+     * @param red_correlation The value of the correlation for the red channel.
+     */
     public void setRed_correlation(double red_correlation) {
         this.red_correlation = red_correlation;
     }
 
+    /**
+     * Returns the value of the Newman-Pearson correlation for green channel, if calculated.
+     *
+     * @return The Newman-Pearson correlation for green channel.
+     * @throws IllegalStateException If the value of Newman-Pearson correlation for green channel is NaN (is not calculated), throw an exception.
+     */
     public double getGreen_correlation() {
         if (Double.isNaN(green_correlation)) {
             throw new IllegalStateException("green_correlation is not set");
@@ -50,10 +85,21 @@ public class Pearson {
         return green_correlation;
     }
 
+    /**
+     * This function sets the value of the correlation for the green channel
+     *
+     * @param green_correlation The value of the correlation for the green channel.
+     */
     public void setGreen_correlation(double green_correlation) {
         this.green_correlation = green_correlation;
     }
 
+    /**
+     * Returns the value of the Newman-Pearson correlation for blue channel, if calculated.
+     *
+     * @return The Newman-Pearson correlation for blue channel.
+     * @throws IllegalStateException If the value of Newman-Pearson correlation for blue channel is NaN (is not calculated), throw an exception.
+     */
     public double getBlue_correlation() {
         if (Double.isNaN(blue_correlation)) {
             throw new IllegalStateException("blue_correlation is not set");
@@ -61,6 +107,11 @@ public class Pearson {
         return blue_correlation;
     }
 
+    /**
+     * This function sets the value of the correlation for the blue channel
+     *
+     * @param blue_correlation The value of the correlation for the blue channel.
+     */
     public void setBlue_correlation(double blue_correlation) {
         this.blue_correlation = blue_correlation;
     }
@@ -115,6 +166,11 @@ public class Pearson {
                 '}';
     }
 
+    /**
+     * It returns the average of the correlation coefficients of the red, green, and blue channels
+     *
+     * @return The average of the correlation coefficients of the red, green, and blue channels.
+     */
     public double getCorrelationCoefficient() {
         return (getRed_correlation() + getGreen_correlation() + getBlue_correlation()) / 3;
     }

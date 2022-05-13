@@ -2,11 +2,22 @@ package it.unisa.di.dif.pattern;
 
 import java.security.SecureRandom;
 
+/**
+ * This class represent a Residual Noise of an image
+ *
+ * @author Andrea Bruno
+* @author Paola Capasso
+ */
 public class ReferencePattern extends NoisePattern{
     public ReferencePattern() {
         super();
     }
 
+    /**
+     * A constructor that takes a ResidualNoise object and creates a ReferencePattern object from it by copy.
+     *
+     * @param rn The residual noise to copy in the new reference pattern
+     */
     public ReferencePattern(ResidualNoise rn) {
         super();
         this.setRedChannel(rn.getRedChannel());
@@ -14,10 +25,23 @@ public class ReferencePattern extends NoisePattern{
         this.setBlueChannel(rn.getBlueChannel());
     }
 
+    /**
+     * Generate a new Reference pattern with the specified height and width
+     *
+     * @param height the height of the new noise pattern
+     * @param width  the width of the new noise pattern
+     */
     public ReferencePattern(int height, int width) {
         super(height, width);
     }
 
+    /**
+     * It creates a new ReferencePattern object, fills it with random values, and returns it
+     *
+     * @param height The height of the reference pattern.
+     * @param width The width of the reference pattern.
+     * @return A random reference pattern.
+     */
     public static ReferencePattern random(int height, int width) {
         SecureRandom random = new SecureRandom();
 
@@ -34,9 +58,9 @@ public class ReferencePattern extends NoisePattern{
             }
         }
 
-        rp.setRedChannel(new ColorChannel(red, ColorChannel.Channel.RED));
-        rp.setGreenChannel(new ColorChannel(green, ColorChannel.Channel.GREEN));
-        rp.setBlueChannel(new ColorChannel(blue, ColorChannel.Channel.BLUE));
+        rp.setRedChannel(new ColorChannel(red, ColorChannel.Color.RED));
+        rp.setGreenChannel(new ColorChannel(green, ColorChannel.Color.GREEN));
+        rp.setBlueChannel(new ColorChannel(blue, ColorChannel.Color.BLUE));
 
         return rp;
     }
