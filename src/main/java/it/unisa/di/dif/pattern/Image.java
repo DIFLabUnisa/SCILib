@@ -8,13 +8,28 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * It's a class that represents an image, and it's a subclass of the class GenericPattern
+ *
+ * @author Andrea Bruno
+* @author Paola Capasso
+ */
 public class Image extends GenericPattern{
     private boolean isFiltered;
 
+    /**
+     * Default constructor
+     */
     public Image() {
         super();
     }
 
+    /**
+     * Reading the image file and storing the pixel values in the red, green and blue channels.
+     *
+     * @param f the original image file on disk
+     * @throws IOException Error on reading file
+     */
     public Image(File f) throws IOException {
         super();
 
@@ -44,9 +59,9 @@ public class Image extends GenericPattern{
                 }
             }
 
-            this.setRedChannel(new ColorChannel(canale_Red, ColorChannel.Channel.RED));
-            this.setGreenChannel(new ColorChannel(canale_Green, ColorChannel.Channel.GREEN));
-            this.setBlueChannel(new ColorChannel(canale_Blue, ColorChannel.Channel.BLUE));
+            this.setRedChannel(new ColorChannel(canale_Red, ColorChannel.Color.RED));
+            this.setGreenChannel(new ColorChannel(canale_Green, ColorChannel.Color.GREEN));
+            this.setBlueChannel(new ColorChannel(canale_Blue, ColorChannel.Color.BLUE));
 
         } catch (IOException e) {
 
@@ -61,10 +76,22 @@ public class Image extends GenericPattern{
         }
     }
 
+    /**
+     * Reading the image file and storing the pixel values in the red, green and blue channels.
+     *
+     * @param path the original image file path on disk
+     * @throws IOException Error on reading file
+     */
     public Image(String path) throws IOException {
         this(new File(path));
     }
 
+    /**
+     * It takes the image and stores it in a file
+     *
+     * @param f the file to write to
+     * @return true if the images is correctly stored, false otherwise.
+     */
     public boolean storeInFile(File f){
         try{
 
@@ -78,9 +105,9 @@ public class Image extends GenericPattern{
             for(int i=0; i<this.getHeight(); i++)
                 for(int j=0; j<this.getWidth(); j++){
 
-                    r = this.getValueAsInteger(i, j, ColorChannel.Channel.RED); // red component 0...255
-                    g = this.getValueAsInteger(i, j, ColorChannel.Channel.GREEN); // green component 0...255
-                    b = this.getValueAsInteger(i, j, ColorChannel.Channel.BLUE); // blue component 0...255
+                    r = this.getValueAsInteger(i, j, ColorChannel.Color.RED); // red component 0...255
+                    g = this.getValueAsInteger(i, j, ColorChannel.Color.GREEN); // green component 0...255
+                    b = this.getValueAsInteger(i, j, ColorChannel.Color.BLUE); // blue component 0...255
 
                     col = (r << 16) | (g << 8) | b;
 
@@ -99,10 +126,20 @@ public class Image extends GenericPattern{
         return true; //Nessun errore (Scrittura riuscita)
     }
 
+    /**
+     * Indicates weather the image is filtered or not
+     *
+     * @return  true if the image is filtered, false otherwise
+     */
     public boolean isFiltered() {
         return isFiltered;
     }
 
+    /**
+     * Setting the value of the boolean variable `isFiltered` to the value of the parameter `filtered`.
+     *
+     * @param filtered the value of isFiltered variable.
+     */
     public void setFiltered(boolean filtered) {
         isFiltered = filtered;
     }

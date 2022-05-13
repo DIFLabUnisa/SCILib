@@ -7,16 +7,18 @@ import java.io.File;
  * @see Image
  * @see ResidualNoise
  * @see ReferencePattern
+ * * @author Andrea Bruno
+* @author Paola Capasso
  */
 public interface Pattern {
 
     /**
      * Returns the color channel object for the specified channel
      *
-     * @param channel The channel to get.
+     * @param color The channel to get.
      * @return A ColorChannel object.
      */
-    public ColorChannel getColorChannel(ColorChannel.Channel channel);
+    public ColorChannel getColorChannel(ColorChannel.Color color);
 
 
     /**
@@ -59,20 +61,20 @@ public interface Pattern {
      *
      * @param x The x coordinate of the pixel you want to get the value of.
      * @param y The y coordinate of the pixel you want to get the value of.
-     * @param channel The channel to get the value from.
+     * @param color The channel to get the value from.
      * @return A float value of the pixel at the given x and y coordinates in the specified channel.
      */
-    public float getValue(int x, int y, ColorChannel.Channel channel);
+    public float getValue(int x, int y, ColorChannel.Color color);
 
     /**
      * Returns the casted to integer value of desired pixel in the specified channel
      *
      * @param x The x coordinate of the pixel you want to get the value of.
      * @param y The y coordinate of the pixel you want to get the value of.
-     * @param channel The channel to get the value from.
+     * @param color The channel to get the value from.
      * @return A integer value of the pixel at the given x and y coordinates in the specified channel.
      */
-    public int getValueAsInteger(int x, int y, ColorChannel.Channel channel);
+    public int getValueAsInteger(int x, int y, ColorChannel.Color color);
 
     /**
      * Set all the pixels of the pattern to 0
@@ -82,10 +84,10 @@ public interface Pattern {
     /**
      * Returns the name of the specified channel
      *
-     * @param channel The channel to get the name of.
+     * @param color The channel to get the name of.
      * @return The name of the channel.
      */
-    public String getChannelName(ColorChannel.Channel channel);
+    public String getChannelName(ColorChannel.Color color);
 
     /**
      * Sets the height of the image.
@@ -163,10 +165,10 @@ public interface Pattern {
      * Returns true if the pattern is equal to the other pattern on the specified channel
      *
      * @param other The other pattern to compare to.
-     * @param channel The channel to compare.
+     * @param color The channel to compare.
      * @return true if the pattern is equal to the other pattern on the specified channel.
      */
-    public boolean equalsChannel(Pattern other, ColorChannel.Channel channel);
+    public boolean equalsChannel(Pattern other, ColorChannel.Color color);
 
     /**
      * This function crops the image to the specified width and height.

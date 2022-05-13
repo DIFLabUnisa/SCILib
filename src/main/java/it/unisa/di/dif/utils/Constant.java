@@ -1,7 +1,8 @@
 package it.unisa.di.dif.utils;
 
-import java.io.File;
-
+/**
+ * It's a singleton class that contains all the constants used in the application
+ */
 public class Constant {
     public static final String VALUE_SEPARATOR_FOR_NOISE_FILE = "\t";
     public static final Character LINE_START_FOR_INFO_IN_NOISE_FILE = '*';

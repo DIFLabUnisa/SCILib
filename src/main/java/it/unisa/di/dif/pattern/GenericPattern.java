@@ -7,6 +7,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
+/**
+ * This class is an abstract class that implements the Pattern interface implementing the common method for all the kind of pattern
+ *
+ * @author Andrea Bruno
+* @author Paola Capasso
+ */
 public abstract class GenericPattern implements Pattern {
     private ColorChannel red;
     private ColorChannel green;
@@ -15,21 +21,30 @@ public abstract class GenericPattern implements Pattern {
     private final CHILogger logger = CHILogger.getInstance();
     private final Constant constant = Constant.getInstance();
 
+    /**
+     * Generate a new Noise pattern with the specified height and width
+     *
+     * @param height the height of the new noise pattern
+     * @param width  the width of the new noise pattern
+     */
     public GenericPattern(int height, int width) {
         float[][] red_data = new float[height][width];
         float[][] green_data = new float[height][width];
         float[][] blue_data = new float[height][width];
-        this.red = new ColorChannel(red_data, ColorChannel.Channel.RED);
-        this.green = new ColorChannel(green_data, ColorChannel.Channel.GREEN);
-        this.blue = new ColorChannel(blue_data, ColorChannel.Channel.BLUE);
+        this.red = new ColorChannel(red_data, ColorChannel.Color.RED);
+        this.green = new ColorChannel(green_data, ColorChannel.Color.GREEN);
+        this.blue = new ColorChannel(blue_data, ColorChannel.Color.BLUE);
         this.clear();
     }
 
+    /**
+     * Default constructor
+     */
     public GenericPattern() {}
 
     @Override
-    public ColorChannel getColorChannel(ColorChannel.Channel channel) {
-        switch (channel) {
+    public ColorChannel getColorChannel(ColorChannel.Color color) {
+        switch (color) {
             case RED:
                 return red;
             case GREEN:
@@ -67,8 +82,8 @@ public abstract class GenericPattern implements Pattern {
     }
 
     @Override
-    public float getValue(int x, int y, ColorChannel.Channel channel) {
-        switch (channel) {
+    public float getValue(int x, int y, ColorChannel.Color color) {
+        switch (color) {
             case RED:
                 return red.getValue(x, y);
             case GREEN:
@@ -81,8 +96,8 @@ public abstract class GenericPattern implements Pattern {
     }
 
     @Override
-    public int getValueAsInteger(int x, int y, ColorChannel.Channel channel) {
-        return (int) getValue(x, y, channel);
+    public int getValueAsInteger(int x, int y, ColorChannel.Color color) {
+        return (int) getValue(x, y, color);
     }
 
     @Override
@@ -99,8 +114,8 @@ public abstract class GenericPattern implements Pattern {
     }
 
     @Override
-    public String getChannelName(ColorChannel.Channel channel) {
-        switch (channel) {
+    public String getChannelName(ColorChannel.Color color) {
+        switch (color) {
             case RED:
                 return "Red";
             case GREEN:
@@ -138,7 +153,7 @@ public abstract class GenericPattern implements Pattern {
     @Override
     public void setRedChannel(ColorChannel value)
     {
-        if (value.getChannel() != ColorChannel.Channel.RED ){
+        if (value.getChannel() != ColorChannel.Color.RED ){
             throw new IllegalArgumentException("Invalid channel");
         }
         setChannel(value);
@@ -146,7 +161,7 @@ public abstract class GenericPattern implements Pattern {
 
     @Override
     public void setGreenChannel(ColorChannel value) {
-        if (value.getChannel() != ColorChannel.Channel.GREEN ){
+        if (value.getChannel() != ColorChannel.Color.GREEN ){
             throw new IllegalArgumentException("Invalid channel");
         }
         setChannel(value);
@@ -154,7 +169,7 @@ public abstract class GenericPattern implements Pattern {
 
     @Override
     public void setBlueChannel(ColorChannel value) {
-        if(value.getChannel() != ColorChannel.Channel.BLUE ){
+        if(value.getChannel() != ColorChannel.Color.BLUE ){
             throw new IllegalArgumentException("Invalid channel");
         }
         setChannel(value);
@@ -195,8 +210,8 @@ public abstract class GenericPattern implements Pattern {
         storeNoise(f, true);
     }
 
-    private void printChannel(ColorChannel.Channel channel, PrintStream ps) {
-        switch (channel) {
+    private void printChannel(ColorChannel.Color color, PrintStream ps) {
+        switch (color) {
             case RED:
                 red.print(ps);
                 break;
@@ -211,8 +226,8 @@ public abstract class GenericPattern implements Pattern {
         }
     }
 
-    private void printChannelAsInt(ColorChannel.Channel channel, PrintStream ps) {
-        switch (channel) {
+    private void printChannelAsInt(ColorChannel.Color color, PrintStream ps) {
+        switch (color) {
             case RED:
                 red.printAsInt(ps);
                 break;
@@ -238,8 +253,8 @@ public abstract class GenericPattern implements Pattern {
     }
 
     @Override
-    public boolean equalsChannel(Pattern other, ColorChannel.Channel channel) {
-        return this.getColorChannel(channel).equals(other.getColorChannel(channel));
+    public boolean equalsChannel(Pattern other, ColorChannel.Color color) {
+        return this.getColorChannel(color).equals(other.getColorChannel(color));
     }
 
     @Override
@@ -264,7 +279,7 @@ public abstract class GenericPattern implements Pattern {
 
         Pattern oth = (Pattern) obj;
 
-        return equalsSize(oth) && equalsChannel(oth, ColorChannel.Channel.RED) && equalsChannel(oth, ColorChannel.Channel.GREEN) && equalsChannel(oth, ColorChannel.Channel.BLUE);
+        return equalsSize(oth) && equalsChannel(oth, ColorChannel.Color.RED) && equalsChannel(oth, ColorChannel.Color.GREEN) && equalsChannel(oth, ColorChannel.Color.BLUE);
     }
 
     @Override
@@ -272,77 +287,103 @@ public abstract class GenericPattern implements Pattern {
         return "GenericPattern [width=" + this.getWidth() + ", height=" + this.getHeight() + "]";
     }
 
+    /**
+     * It adds the values of the pattern to the values of the current pattern
+     *
+     * @param pattern The pattern to add to this pattern.
+     */
     public void add(GenericPattern pattern) {
         if(!equalsSize(pattern)) {
             throw new IllegalArgumentException("Patterns must be of the same size");
         }
 
-        for(ColorChannel.Channel channel : ColorChannel.Channel.values()) {
+        for(ColorChannel.Color color : ColorChannel.Color.values()) {
             for(int i = 0; i < this.getHeight(); i++) {
                 for(int j = 0; j < this.getWidth(); j++) {
-                    this.getColorChannel(channel).setValue(i, j,
-                            this.getColorChannel(channel).getValue(i, j) + pattern.getColorChannel(channel).getValue(i, j));
+                    this.getColorChannel(color).setValue(i, j,
+                            this.getColorChannel(color).getValue(i, j) + pattern.getColorChannel(color).getValue(i, j));
                 }
             }
         }
     }
 
+    /**
+     * For each channel, for each row, for each column, subtract the value of the pixel in the pattern from the value of
+     * the pixel in the current pattern.
+     *
+     * @param pattern The pattern to subtract from this pattern.
+     */
     public void subtract(GenericPattern pattern) {
         if(!equalsSize(pattern)) {
             throw new IllegalArgumentException("Patterns must be of the same size");
         }
 
-        for(ColorChannel.Channel channel : ColorChannel.Channel.values()) {
+        for(ColorChannel.Color color : ColorChannel.Color.values()) {
             for(int i = 0; i < this.getHeight(); i++) {
                 for(int j = 0; j < this.getWidth(); j++) {
-                    this.getColorChannel(channel).setValue(i, j,
-                            this.getColorChannel(channel).getValue(i, j) - pattern.getColorChannel(channel).getValue(i, j));
+                    this.getColorChannel(color).setValue(i, j,
+                            this.getColorChannel(color).getValue(i, j) - pattern.getColorChannel(color).getValue(i, j));
                 }
             }
         }
     }
 
+    /**
+     * It multiplies the values of the current pattern with the values of the pattern passed as an argument
+     *
+     * @param pattern The pattern to multiply with
+     */
     public void multiply(GenericPattern pattern) {
         if(!equalsSize(pattern)) {
             throw new IllegalArgumentException("Patterns must be of the same size");
         }
 
-        for(ColorChannel.Channel channel : ColorChannel.Channel.values()) {
+        for(ColorChannel.Color color : ColorChannel.Color.values()) {
             for(int i = 0; i < this.getHeight(); i++) {
                 for(int j = 0; j < this.getWidth(); j++) {
-                    this.getColorChannel(channel).setValue(i, j,
-                            this.getColorChannel(channel).getValue(i, j) * pattern.getColorChannel(channel).getValue(i, j));
+                    this.getColorChannel(color).setValue(i, j,
+                            this.getColorChannel(color).getValue(i, j) * pattern.getColorChannel(color).getValue(i, j));
                 }
             }
         }
     }
 
+    /**
+     * Divide the values of the current pattern by the values of the given pattern.
+     *
+     * @param pattern The pattern to divide this pattern by.
+     */
     public void divide(GenericPattern pattern) {
         if(!equalsSize(pattern)) {
             throw new IllegalArgumentException("Patterns must be of the same size");
         }
 
-        for(ColorChannel.Channel channel : ColorChannel.Channel.values()) {
+        for(ColorChannel.Color color : ColorChannel.Color.values()) {
             for(int i = 0; i < this.getHeight(); i++) {
                 for(int j = 0; j < this.getWidth(); j++) {
-                    float value = pattern.getColorChannel(channel).getValue(i, j) == 0 ? 0 :
-                            this.getColorChannel(channel).getValue(i, j) / pattern.getColorChannel(channel).getValue(i, j);
-                    this.getColorChannel(channel).setValue(i, j, value);
+                    float value = pattern.getColorChannel(color).getValue(i, j) == 0 ? 0 :
+                            this.getColorChannel(color).getValue(i, j) / pattern.getColorChannel(color).getValue(i, j);
+                    this.getColorChannel(color).setValue(i, j, value);
                 }
             }
         }
     }
 
+    /**
+     * Divide each pixel in the pattern by a value.
+     *
+     * @param value The value to divide the image by.
+     */
     public void divideByValue(float value) {
         if(value == 0) {
             throw new IllegalArgumentException("Value must be non-zero");
         }
 
-        for(ColorChannel.Channel channel : ColorChannel.Channel.values()) {
+        for(ColorChannel.Color color : ColorChannel.Color.values()) {
             for(int i = 0; i < this.getHeight(); i++) {
                 for(int j = 0; j < this.getWidth(); j++) {
-                    float r = this.getColorChannel(channel).getValue(i, j) / value;
-                    this.getColorChannel(channel).setValue(i, j, r);
+                    float r = this.getColorChannel(color).getValue(i, j) / value;
+                    this.getColorChannel(color).setValue(i, j, r);
                 }
             }
         }
