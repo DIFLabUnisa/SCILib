@@ -182,15 +182,15 @@ public class ResidualNoise extends NoisePattern{
         int height = Integer.parseInt(split[split.length-1]);;
         ResidualNoise rp = new ResidualNoise(height, width);
         line = r.readLine();
-        String channelStored = line;
+        StringBuilder b = new StringBuilder().append(line).append("\n");
         while (line != null) {
             if(line.startsWith(Constant.LINE_START_FOR_CHANNEL_IN_NOISE_FILE+"")){
-                channelStored = line;
+                b = new StringBuilder().append(line).append("\n");
             } else if(line.trim().equals("")) {
-                ColorChannel c = new ColorChannel(channelStored);
+                ColorChannel c = new ColorChannel(b.toString());
                 rp.setChannel(c);
             } else {
-                channelStored += line;
+                b.append(line).append("\n");
             }
 
             line = r.readLine();
