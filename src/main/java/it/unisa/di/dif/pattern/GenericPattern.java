@@ -184,7 +184,7 @@ public abstract class GenericPattern implements Pattern {
 
         try (PrintStream ps = new PrintStream(f)) {
 
-            ps.print(Constant.LINE_START_FOR_INFO_IN_NOISE_FILE +
+            ps.print(Constant.LINE_START_FOR_INFO_IN_NOISE_FILE + Constant.VALUE_SEPARATOR_FOR_NOISE_FILE +
                     getWidth() + Constant.VALUE_SEPARATOR_FOR_NOISE_FILE + getHeight() + "\n");
 
             if(asInt) {

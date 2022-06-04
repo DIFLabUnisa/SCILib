@@ -281,7 +281,7 @@ public class ColorChannel {
     public String toString(boolean asInt) {
         StringBuilder sb = new StringBuilder();
         sb.append(Constant.LINE_START_FOR_CHANNEL_IN_NOISE_FILE).append(this.getColorName());
-        sb.append(Constant.VALUE_SEPARATOR_FOR_NOISE_FILE).append(this.getWidth()).append(Constant.VALUE_SEPARATOR_FOR_NOISE_FILE).append(this.getHeight());
+        sb.append(Constant.VALUE_SEPARATOR_FOR_NOISE_FILE).append(this.getWidth()).append(Constant.VALUE_SEPARATOR_FOR_NOISE_FILE).append(this.getHeight()).append("\n");
         for (float[] row : this.data) {
             for (float v : row) {
                 if (asInt) {

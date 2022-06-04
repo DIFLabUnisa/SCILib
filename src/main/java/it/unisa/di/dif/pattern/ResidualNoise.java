@@ -1,5 +1,12 @@
 package it.unisa.di.dif.pattern;
 
+import it.unisa.di.dif.utils.Constant;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
 /**
  * This class represent a Residual Noise of an image
  *
@@ -159,5 +166,36 @@ public class ResidualNoise extends NoisePattern{
             copy.setChannel(new ColorChannel(this.getRedChannel().getCentralCropping(width, height), color));
         }
         return copy;
+    }
+
+    public static ResidualNoise load(File f) throws IOException {
+        BufferedReader r = new BufferedReader(new FileReader(f));
+        String line = r.readLine();
+        if(line == null) {
+            throw new IOException("File is empty");
+        }
+        String[] split = line.split(Constant.VALUE_SEPARATOR_FOR_NOISE_FILE);
+        if(split.length != 3) {
+            throw new IOException("Invalid file format");
+        }
+        int width = Integer.parseInt(split[1]);
+        int height = Integer.parseInt(split[2]);
+        ResidualNoise rp = new ResidualNoise(height, width);
+        line = r.readLine();
+        String channelStored = line;
+        while (line != null) {
+            if(line.startsWith(Constant.LINE_START_FOR_CHANNEL_IN_NOISE_FILE+"")){
+                channelStored = line;
+            } else if(line.trim().equals("")) {
+                ColorChannel c = new ColorChannel(channelStored);
+                rp.setChannel(c);
+            } else {
+                channelStored += line;
+            }
+
+            line = r.readLine();
+        }
+        r.close();
+        return rp;
     }
 }
