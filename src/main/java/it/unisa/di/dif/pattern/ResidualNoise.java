@@ -175,11 +175,11 @@ public class ResidualNoise extends NoisePattern{
             throw new IOException("File is empty");
         }
         String[] split = line.split(Constant.VALUE_SEPARATOR_FOR_NOISE_FILE);
-        if(split.length != 3) {
+        if(split.length < 2) {
             throw new IOException("Invalid file format");
         }
-        int width = Integer.parseInt(split[1]);
-        int height = Integer.parseInt(split[2]);
+        int width = Integer.parseInt(split[split.length-2]);
+        int height = Integer.parseInt(split[split.length-1]);;
         ResidualNoise rp = new ResidualNoise(height, width);
         line = r.readLine();
         String channelStored = line;
