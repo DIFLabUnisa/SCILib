@@ -26,7 +26,7 @@ public class Image extends GenericPattern{
         super();
     }
 
-    public Image(BufferedImage image) {
+    private void initImage(BufferedImage image) {
         int x,x1;
 
         int numeroRighe=image.getHeight();
@@ -53,6 +53,11 @@ public class Image extends GenericPattern{
         this.setBlueChannel(new ColorChannel(canale_Blue, ColorChannel.Color.BLUE));
     }
 
+    public Image(BufferedImage image) {
+        super();
+        initImage(image);
+    }
+
     /**
      * Reading the image from an input stream and storing the pixel values in the red, green and blue channels.
      *
@@ -66,31 +71,7 @@ public class Image extends GenericPattern{
 
         try {
             image= ImageIO.read(is);
-
-            int x,x1;
-
-            int numeroRighe=image.getHeight();
-            int numeroColonne=image.getWidth();
-
-            setFiltered(false);
-
-            float[][] canale_Red = new float[numeroRighe][numeroColonne];
-            float[][] canale_Green = new float[numeroRighe][numeroColonne];
-            float[][] canale_Blue = new float[numeroRighe][numeroColonne];
-
-            for(int i=0;i<numeroRighe;i++){
-                for(int j=0;j<numeroColonne;j++){
-                    x=image.getRGB(j, i); //il metodo prende prima le colonne e poi le righe
-                    x1=x&0x7FFFFFFF;
-                    canale_Red[i][j]=((x1/256)/256)%256;
-                    canale_Green[i][j]=(x1/256)%256;
-                    canale_Blue[i][j]=x1%256;
-                }
-            }
-
-            this.setRedChannel(new ColorChannel(canale_Red, ColorChannel.Color.RED));
-            this.setGreenChannel(new ColorChannel(canale_Green, ColorChannel.Color.GREEN));
-            this.setBlueChannel(new ColorChannel(canale_Blue, ColorChannel.Color.BLUE));
+            initImage(image);
 
         } catch (IOException e) {
 
@@ -118,32 +99,7 @@ public class Image extends GenericPattern{
 
         try {
             image= ImageIO.read(f);
-
-            int x,x1;
-
-            int numeroRighe=image.getHeight();
-            int numeroColonne=image.getWidth();
-
-            setFiltered(false);
-
-            float[][] canale_Red = new float[numeroRighe][numeroColonne];
-            float[][] canale_Green = new float[numeroRighe][numeroColonne];
-            float[][] canale_Blue = new float[numeroRighe][numeroColonne];
-
-            for(int i=0;i<numeroRighe;i++){
-                for(int j=0;j<numeroColonne;j++){
-                    x=image.getRGB(j, i); //il metodo prende prima le colonne e poi le righe
-                    x1=x&0x7FFFFFFF;
-                    canale_Red[i][j]=((x1/256)/256)%256;
-                    canale_Green[i][j]=(x1/256)%256;
-                    canale_Blue[i][j]=x1%256;
-                }
-            }
-
-            this.setRedChannel(new ColorChannel(canale_Red, ColorChannel.Color.RED));
-            this.setGreenChannel(new ColorChannel(canale_Green, ColorChannel.Color.GREEN));
-            this.setBlueChannel(new ColorChannel(canale_Blue, ColorChannel.Color.BLUE));
-
+            initImage(image);
         } catch (IOException e) {
 
             Constant constant = Constant.getInstance();
