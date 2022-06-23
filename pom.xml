@@ -6,7 +6,7 @@
 
     <groupId>it.unisa.di.dif</groupId>
     <artifactId>scilib</artifactId>
-    <version>1.0.4</version>
+    <version>1.1.0</version>
     <build>
         <plugins>
             <plugin>
@@ -86,6 +86,11 @@
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
             <version>2.17.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.bio</groupId>
+            <artifactId>npy</artifactId>
+            <version>0.3.5</version>
         </dependency>
 <!--        <dependency>-->
 <!--            <groupId>org.ejml</groupId>-->

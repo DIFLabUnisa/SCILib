@@ -2,10 +2,12 @@ package it.unisa.di.dif.pattern;
 
 import it.unisa.di.dif.utils.CHILogger;
 import it.unisa.di.dif.utils.Constant;
+import org.jetbrains.bio.npy.NpyArray;
+import org.jetbrains.bio.npy.NpzFile;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
+import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * This class is an abstract class that implements the Pattern interface implementing the common method for all the kind of pattern
@@ -391,4 +393,130 @@ public abstract class GenericPattern implements Pattern {
 
     @Override
     public abstract GenericPattern getCroppedPattern(int width, int height);
+
+    @Override
+    public void storeAsNpz(Path p, String name) {
+//        long t = System.currentTimeMillis();
+//        Path ofile = Paths.get("output", "test"+t+".csv");
+//        try {
+//            BufferedWriter bos = new BufferedWriter(new FileWriter(ofile.toFile()));
+
+            float [] data = new float[this.getHeight() * this.getWidth() * 3];
+            int idx = 0;
+            for(ColorChannel.Color c : ColorChannel.Color.values()) {
+                float[][] channel = this.getColorChannel(c).getData();
+                int height = channel.length;
+                int width = channel[0].length;
+                for(int i = 0; i < height; i++) {
+                    for(int j = 0; j < width; j++) {
+                        int dst = (idx * width * height) + (i * width) + j;
+                        data[dst] = channel[i][j];
+//                        if(dst==2848){
+//                            System.out.println("idx="+idx+" i="+i+" j="+ j +" height=" + height
+//                                    +" width=" + width +" dst="+dst);
+//                        }
+//                        bos.write(dst+"\n");
+                    }
+                }
+                idx++;
+            }
+            NpzFile.Writer w = NpzFile.write(p,true);
+            int [] shape = {this.getHeight(), this.getWidth(), idx};
+            w.write(name, data, shape);
+            w.close();
+//            bos.flush();
+//            bos.close();
+//        } catch (FileNotFoundException e) {
+//            throw new RuntimeException(e);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+    }
+
+    @Override
+    public void storeAsNpz(String filename, String name) {
+        storeAsNpz(Paths.get(filename), name);
+    }
+
+    @Override
+    public void storeAsNpz(Path p) {
+        storeAsNpz(p, "data");
+    }
+
+    @Override
+    public void storeAsNpz(String filename) {
+        this.storeAsNpz(filename, "data");
+    }
+
+    @Override
+    public float[][][] loadFromNpz(Path p) {
+        return loadFromNpz(p, "data");
+    }
+
+    @Override
+    public float[][][] loadFromNpz(String filename) {
+        return loadFromNpz(Paths.get(filename), "data");
+    }
+
+    @Override
+    public float[][][] loadFromNpz(Path p, String name) {
+        NpzFile.Reader r = NpzFile.read(p);
+        NpyArray data = r.get(name,1<<18);
+        int height = data.getShape()[0];
+        int width = data.getShape()[1];
+        int channels = data.getShape()[2];
+        float[][][] result = new float[height][width][channels];
+        float [] result_array = data.asFloatArray();
+        for(int k=0; k<channels; k++){
+            for(int i=0; i<height; i++){
+                for(int j=0; j<width; j++){
+                    int dst = (k * width * height) + (i * width) + j;
+                    result[i][j][k] = result_array[dst];
+                }
+            }
+        }
+//        for (int i = 0; i < height; i++) {
+//            for (int j = 0; j < width; j++) {
+//                for (int k = 0; k < channels; k++) {
+//                    result[i][j][k] = result_array[i * width * channels + j * channels + k];
+//                }
+//            }
+//        }
+        return result;
+    }
+
+    public static ColorChannel[] getColorChannelsFromFloatarray(float[][][] data) {
+        int height = data.length;
+        int width = data[0].length;
+        int chan_no = data[0][0].length;
+        ColorChannel[] channels = new ColorChannel[chan_no];
+        for(int i = 0; i < chan_no; i++) {
+            float [][] channel = new float[height][width];
+            for(int j = 0; j < height; j++) {
+                for (int k = 0; k < width; k++) {
+                    channel[j][k] = data[j][k][i];
+                }
+            }
+            channels[i] = new ColorChannel(channel, ColorChannel.getColorFromIndex(i));
+        }
+        return channels;
+    }
+
+    @Override
+    public float[][][] loadFromNpz(String filename, String name) {
+        return loadFromNpz(Paths.get(filename), name);
+    }
+
+    public void initFromNpz(Path p, String name) {
+        if(name==null)
+            name="data";
+        float [][][] data = this.loadFromNpz(p, name);
+        ColorChannel[] channels = GenericPattern.getColorChannelsFromFloatarray(data);
+        for (ColorChannel channel : channels) {
+            this.setChannel(channel);
+        }
+    }
+    public void initFromNpz(String filename, String name) {
+        this.initFromNpz(Paths.get(filename), name);
+    }
 }

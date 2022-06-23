@@ -3,6 +3,7 @@ package it.unisa.di.dif.pattern;
 import it.unisa.di.dif.utils.Constant;
 
 import java.io.*;
+import java.nio.file.Path;
 import java.security.SecureRandom;
 
 /**

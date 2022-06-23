@@ -1,6 +1,7 @@
 package it.unisa.di.dif.pattern;
 
 import java.io.File;
+import java.nio.file.Path;
 
 /**
  * It's an interface to define a generic pattern
@@ -130,6 +131,16 @@ public interface Pattern {
      * @param value The new value for the blue channel.
      */
     public void setBlueChannel(ColorChannel value);
+
+    public void storeAsNpz(Path p, String name);
+    public void storeAsNpz(String filename, String name);
+    public void storeAsNpz(Path p);
+    public void storeAsNpz(String filename);
+    public float[][][] loadFromNpz(Path p);
+    public float[][][] loadFromNpz(String filename);
+    public float[][][] loadFromNpz(Path p, String name);
+    public float[][][] loadFromNpz(String filename, String name);
+
 
     /**
      * This function stores the noise in a file in a csv-like style

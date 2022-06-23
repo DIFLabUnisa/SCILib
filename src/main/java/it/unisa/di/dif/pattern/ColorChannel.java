@@ -189,6 +189,32 @@ public class ColorChannel {
         }
     }
 
+    public static Color getColorFromIndex(int index) {
+        switch (index) {
+        case 0:
+            return RED;
+        case 1:
+            return GREEN;
+        case 2:
+            return BLUE;
+        default:
+            throw new IllegalArgumentException("Unknown channel");
+        }
+    }
+
+    public static int getIndexFromColor(Color color) {
+        switch (color) {
+        case RED:
+            return 0;
+        case GREEN:
+            return 1;
+        case BLUE:
+            return 2;
+        default:
+            throw new IllegalArgumentException("Unknown channel");
+        }
+    }
+
     /**
      * Set the color for the channel given a color name
      *
