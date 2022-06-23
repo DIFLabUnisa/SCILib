@@ -20,7 +20,7 @@ In addition the library can be used to the calculation of the statical correlati
 <dependency>
   <groupId>it.unisa.di.dif</groupId>
   <artifactId>scilib</artifactId>
-  <version>1.0.4</version>
+  <version>1.1.1</version>
 </dependency>
 ```
 
