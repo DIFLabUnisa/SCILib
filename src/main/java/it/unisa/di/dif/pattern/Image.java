@@ -131,7 +131,10 @@ public class Image extends GenericPattern{
      */
     public boolean storeInFile(File f){
         try{
-
+            String format = "JPG";
+            if(f.getName().toLowerCase().endsWith("png")){
+                format = "PNG";
+            }
             BufferedImage immagine = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_RGB);
 
             int r = 0;
@@ -152,7 +155,7 @@ public class Image extends GenericPattern{
                 }
 
 
-            ImageIO.write(immagine, "PNG", f); //Non voglio la compressione
+            ImageIO.write(immagine, format, f); //Non voglio la compressione
 
         }
 
