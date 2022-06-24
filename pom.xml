@@ -58,23 +58,14 @@
                     </execution>
                 </executions>
             </plugin>
-<!--            <plugin>-->
-<!--                &lt;!&ndash; explicitly define maven-deploy-plugin after other to force exec order &ndash;&gt;-->
-<!--                <artifactId>maven-deploy-plugin</artifactId>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>deploy</id>-->
-<!--                        <phase>deploy</phase>-->
-<!--                        <goals><goal>deploy</goal></goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
         </plugins>
     </build>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 
     <dependencies>
