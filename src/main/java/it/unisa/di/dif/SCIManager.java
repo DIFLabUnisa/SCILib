@@ -60,9 +60,15 @@ public abstract class SCIManager {
             }
             int finalWidth = width;
             int finalHeight = height;
-            images = images.stream()
-                    .map(image -> image.getCroppedPattern(finalWidth, finalHeight))
-                    .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+            for(int i = 0; i<images.size(); i++) {
+                Image image = images.get(i);
+                image = image.getCroppedPattern(finalWidth, finalHeight);
+                images.set(i, image);
+            }
+            System.gc();
+//            images = images.stream()
+//                    .map(image -> image.getCroppedPattern(finalWidth, finalHeight))
+//                    .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
         }
 
         int height = images.get(0).getHeight();

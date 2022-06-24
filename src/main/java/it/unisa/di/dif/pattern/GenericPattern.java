@@ -396,11 +396,6 @@ public abstract class GenericPattern implements Pattern {
 
     @Override
     public void storeAsNpz(Path p, String name) {
-//        long t = System.currentTimeMillis();
-//        Path ofile = Paths.get("output", "test"+t+".csv");
-//        try {
-//            BufferedWriter bos = new BufferedWriter(new FileWriter(ofile.toFile()));
-
             float [] data = new float[this.getHeight() * this.getWidth() * 3];
             int idx = 0;
             for(ColorChannel.Color c : ColorChannel.Color.values()) {
@@ -411,11 +406,7 @@ public abstract class GenericPattern implements Pattern {
                     for(int j = 0; j < width; j++) {
                         int dst = (idx * width * height) + (i * width) + j;
                         data[dst] = channel[i][j];
-//                        if(dst==2848){
-//                            System.out.println("idx="+idx+" i="+i+" j="+ j +" height=" + height
-//                                    +" width=" + width +" dst="+dst);
-//                        }
-//                        bos.write(dst+"\n");
+
                     }
                 }
                 idx++;
@@ -424,13 +415,6 @@ public abstract class GenericPattern implements Pattern {
             int [] shape = {this.getHeight(), this.getWidth(), idx};
             w.write(name, data, shape);
             w.close();
-//            bos.flush();
-//            bos.close();
-//        } catch (FileNotFoundException e) {
-//            throw new RuntimeException(e);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
     }
 
     @Override
@@ -462,6 +446,7 @@ public abstract class GenericPattern implements Pattern {
     public float[][][] loadFromNpz(Path p, String name) {
         NpzFile.Reader r = NpzFile.read(p);
         NpyArray data = r.get(name,1<<18);
+        r.close();
         int height = data.getShape()[0];
         int width = data.getShape()[1];
         int channels = data.getShape()[2];
@@ -475,13 +460,6 @@ public abstract class GenericPattern implements Pattern {
                 }
             }
         }
-//        for (int i = 0; i < height; i++) {
-//            for (int j = 0; j < width; j++) {
-//                for (int k = 0; k < channels; k++) {
-//                    result[i][j][k] = result_array[i * width * channels + j * channels + k];
-//                }
-//            }
-//        }
         return result;
     }
 
