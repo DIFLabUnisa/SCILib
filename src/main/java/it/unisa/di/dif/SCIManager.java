@@ -7,7 +7,9 @@ import it.unisa.di.dif.pattern.*;
 import it.unisa.di.dif.utils.AdaptationMethod;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -28,14 +30,15 @@ public abstract class SCIManager {
      * @param method The method used to adapt the images to the same size.
      * @return A reference pattern.
      */
-    public static ReferencePattern extractReferencePattern(ArrayList<Image> images, Filter filter, AdaptationMethod method) {
+    public static ReferencePattern extractReferencePattern(List<Path> images, Filter filter, AdaptationMethod method) throws IOException {
         if (method == AdaptationMethod.RESIZE) {
             throw new UnsupportedOperationException("Resize method is not supported yet");
         }
 
         if (method == AdaptationMethod.NOT_ADAPT) {
             Image old = null;
-            for (Image image : images) {
+            for (Path p : images) {
+                Image image = new Image(p.toFile());
                 if (old == null || old.equalsSize(image)) {
                     old = image;
                 } else {
@@ -48,7 +51,8 @@ public abstract class SCIManager {
             Image old = null;
             int height = Integer.MAX_VALUE;
             int width = Integer.MAX_VALUE;
-            for (Image image : images) {
+            for (Path p : images) {
+                Image image = new Image(p.toFile());
                 if (old == null) {
                     old = image;
                     continue;
@@ -60,10 +64,10 @@ public abstract class SCIManager {
             }
             int finalWidth = width;
             int finalHeight = height;
-            for(int i = 0; i<images.size(); i++) {
-                Image image = images.get(i);
+            for (Path path : images) {
+                Image image = new Image(path.toFile());
                 image = image.getCroppedPattern(finalWidth, finalHeight);
-                images.set(i, image);
+                image.storeInFile(path.toFile());
             }
             System.gc();
 //            images = images.stream()
@@ -71,11 +75,13 @@ public abstract class SCIManager {
 //                    .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
         }
 
-        int height = images.get(0).getHeight();
-        int width = images.get(0).getWidth();
+        Image image0 = new Image(images.get(0).toFile());
+        int height = image0.getHeight();
+        int width = image0.getWidth();
         ReferencePattern rp = new ReferencePattern(height, width);
         int numImagesInRP = 0;
-        for (Image image : images) {
+        for (Path p : images) {
+            Image image = new Image(p.toFile());
             ResidualNoise rn = extractResidualNoise(image, filter);
             rp.add(rn);
             numImagesInRP++;
@@ -93,7 +99,7 @@ public abstract class SCIManager {
      * @param filter The filter to use.
      * @return A reference pattern.
      */
-    public static ReferencePattern extractReferencePattern(ArrayList<Image> images, Filter filter) {
+    public static ReferencePattern extractReferencePattern(List<Path> images, Filter filter) throws IOException {
         return extractReferencePattern(images, filter, AdaptationMethod.NOT_ADAPT);
     }
 
@@ -104,7 +110,7 @@ public abstract class SCIManager {
      * @param method The method used to adapt the size of the images.
      * @return A reference pattern.
      */
-    public static ReferencePattern extractReferencePattern(ArrayList<Image> images, AdaptationMethod method) {
+    public static ReferencePattern extractReferencePattern(List<Path> images, AdaptationMethod method) throws IOException {
         return extractReferencePattern(images, FilterFactory.getDefaultFilter(), method);
     }
 
@@ -140,7 +146,7 @@ public abstract class SCIManager {
      * @param images The images to extract the reference pattern from.
      * @return A reference pattern.
      */
-    public static ReferencePattern extractReferencePattern(ArrayList<Image> images) {
+    public static ReferencePattern extractReferencePattern(List<Path> images) throws IOException {
         return extractReferencePattern(images, FilterFactory.getDefaultFilter(), AdaptationMethod.NOT_ADAPT);
     }
 

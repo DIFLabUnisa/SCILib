@@ -52,23 +52,22 @@ class ImageTuple {
 public class Test {
     public static ReferencePattern getRPFromFolder(String folderPath) throws IOException {
         System.out.println("RP for: " + folderPath);
-        List<String> result =  null;
+        List<Path> result =  null;
         try (Stream<Path> walk = Files.walk(Paths.get(folderPath))) {
             result = walk.filter(p->!Files.isDirectory(p))
-                    .map(Path::toString)
-                    .filter(p->p.toLowerCase().endsWith(".jpg"))
+                    .filter(p->p.toString().toLowerCase().endsWith(".jpg"))
                     .collect(Collectors.toList());
 
         }
-        ArrayList<Image> images = result.stream().map(s->{
-            try {
-                return new Image(s);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }).collect(Collectors.toCollection(ArrayList::new));
+//        ArrayList<Image> images = result.stream().map(s->{
+//            try {
+//                return new Image(s);
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }).collect(Collectors.toCollection(ArrayList::new));
 
-        return SCIManager.extractReferencePattern(images);
+        return SCIManager.extractReferencePattern(result);
     }
 
     public static RNTuple[] getRNFromFolder(String folderPath, String device) throws IOException {
